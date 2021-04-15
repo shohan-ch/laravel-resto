@@ -47,6 +47,7 @@
                 @endphp
 
                 @foreach ( $catRelation->products as $product)
+
                 <div class="col-lg-6 menu-item {{ $category->name }}">
                     <img src="assets/img/menu/lobster-bisque.jpg" class="menu-img mr-3" alt="">
                     <div>
@@ -61,6 +62,7 @@
                         <a href="#" style="font-size: 26px;"><i class="icofont-plus-square"></i></a>
                     </div>
                 </div>
+
                 @endforeach
 
                 @endforeach

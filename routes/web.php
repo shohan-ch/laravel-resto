@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::resource('cart', CartController::class);
+
+Route::get('cart', function () {
+
+    return view('front-end.cart.index');
+});
+
 
 Route::view('/', 'front-end.index');
 

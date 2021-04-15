@@ -12,6 +12,12 @@
         <div class="row">
             <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
 
+                @if(session('success'))
+                <p class="text-info font-weight-bold"> {{ session('success') }} </p>
+
+                @endif
+                <p class="text-info font-weight-bold"> {{ Cart::count() }}</p>
+
                 <!-- Shopping cart table -->
                 <div class="table-responsive">
                     <table class="table">
@@ -32,6 +38,10 @@
                             </tr>
                         </thead>
                         <tbody>
+
+                            @foreach (Cart::content() as $item )
+
+
                             <tr>
                                 <th scope="row" class="border-0">
                                     <div class="p-2">
@@ -39,14 +49,15 @@
                                             alt="" width="70" class="img-fluid rounded shadow-sm">
                                         <div class="ml-3 d-inline-block align-middle">
                                             <h5 class="mb-0"> <a href="#"
-                                                    class="text-dark d-inline-block align-middle">Timex Unisex
-                                                    Originals</a></h5><span
+                                                    class="text-dark d-inline-block align-middle">{{ $item->name }}</a>
+                                            </h5>
+                                            {{-- <span
                                                 class="text-muted font-weight-normal font-italic d-block">Category:
-                                                Watches</span>
+                                                Watches</span> --}}
                                         </div>
                                     </div>
                                 </th>
-                                <td class="border-0 align-middle"><strong>$79.00</strong></td>
+                                <td class="border-0 align-middle"><strong>{{ $item->price }}</strong></td>
                                 <td class="border-0 align-middle">
                                     <a href="#">-</a><a href="#" class="border p-1">3</a><a href="#">+</a>
 
@@ -55,6 +66,11 @@
                                 <td class="border-0 align-middle"><a href="#" class="text-dark">
                                         <i class="icofont-trash"></i></a></td>
                             </tr>
+
+                            @endforeach
+
+
+
                             <tr>
                                 <th scope="row">
                                     <div class="p-2">

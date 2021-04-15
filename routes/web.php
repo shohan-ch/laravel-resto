@@ -20,10 +20,10 @@ use App\Http\Controllers\CartController;
 
 Route::resource('cart', CartController::class);
 
-Route::get('cart', function () {
+// Route::get('cart', function () {
 
-    return view('front-end.cart.index');
-});
+//     return view('front-end.cart.index');
+// });
 
 
 Route::view('/', 'front-end.index');

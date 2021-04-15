@@ -59,7 +59,19 @@
                     </div>
                     <div class="d-flex justify-content-between" style="margin: 15px 0 0 86px;">
                         <p style="font-weight: 600; color: #cda45e;">${{ $product->price }}</p>
-                        <a href="#" style="font-size: 26px;"><i class="icofont-plus-square"></i></a>
+
+                        {{-- <a href="#" style="font-size: 26px;"><i class="icofont-plus-square"></i></a> --}}
+
+                        <form action="{{ route('cart.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $product->id }}">
+                            <input type="hidden" name="name" value="{{ $product->name }}">
+                            <input type="hidden" name="price" value="{{ $product->price }}">
+
+                            <button type="submit" style="font-size: 26px;"><i class="icofont-plus-square"></i></button>
+
+                        </form>
+
                     </div>
                 </div>
 

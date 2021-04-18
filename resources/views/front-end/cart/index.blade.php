@@ -13,7 +13,7 @@
             <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
 
                 @if(session('success'))
-                <p class="text-info font-weight-bold"> {{ session('success') }} </p>
+                <p class="text-info font-weight-bold bg-info p-2 text-light"> {{ session('success') }} </p>
 
                 @endif
                 <p class="text-info font-weight-bold"> {{ Cart::count() }}</p>
@@ -38,7 +38,7 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            {{-- {{  dump(Cart::content()) }} --}}
                             @foreach (Cart::content() as $item )
 
 
@@ -49,7 +49,7 @@
                                             alt="" width="70" class="img-fluid rounded shadow-sm">
                                         <div class="ml-3 d-inline-block align-middle">
                                             <h5 class="mb-0"> <a href="#"
-                                                    class="text-dark d-inline-block align-middle">{{ $item->name }}</a>
+                                                    class="text-dark d-inline-block align-middle">{{ $item->model->name }}</a>
                                             </h5>
                                             {{-- <span
                                                 class="text-muted font-weight-normal font-italic d-block">Category:
@@ -57,55 +57,49 @@
                                         </div>
                                     </div>
                                 </th>
-                                <td class="border-0 align-middle"><strong>{{ $item->price }}</strong></td>
+                                <td class="border-0 align-middle"><strong>{{ $item->model->price }}</strong></td>
                                 <td class="border-0 align-middle">
-                                    <a href="#">-</a><a href="#" class="border p-1">3</a><a href="#">+</a>
+
+                                    <form action="{{ route('cart.itemDecrement', $item->rowId) }}" method="POST"
+                                        style="display: inline-block !important;" id="itemDecrementForm">
+                                        @csrf
+                                        @method('put')
+                                        {{-- <a onclick="document.getElementById('itemDecrementForm').submit()">-</a> --}}
+                                        <button class="btn btn-sm" type="submit">-</button>
+
+                                    </form>
+                                    <span class="font-weight-bold p-1">{{ $item->qty }}</span>
+                                    <form action="{{ route('cart.itemIncrement', $item->rowId) }}" method="POST"
+                                        style="display: inline-block !important;" id="itemIncrementForm">
+                                        @csrf
+                                        @method('put')
+                                        {{-- <input type="hidden" name="quantity" value="1"> --}}
+                                        {{-- <a href="#"
+                                            onclick="document.getElementById('itemIncrementForm').submit()">+</a> --}}
+                                        <button class="btn btn-sm" type="submit">+</button>
+
+                                    </form>
+
+
 
 
                                 </td>
-                                <td class="border-0 align-middle"><a href="#" class="text-dark">
-                                        <i class="icofont-trash"></i></a></td>
+                                <td class="border-0 align-middle">
+
+                                    <form action="{{ route('cart.destroy', $item->rowId) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+
+                                        <button type="submit" class="text-dark">
+                                            <i class="icofont-trash"></i>
+                                        </button>
+
+                                    </form>
+
+                                </td>
                             </tr>
 
                             @endforeach
-
-
-
-                            <tr>
-                                <th scope="row">
-                                    <div class="p-2">
-                                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1556670479/product-3_cexmhn.jpg"
-                                            alt="" width="70" class="img-fluid rounded shadow-sm">
-                                        <div class="ml-3 d-inline-block align-middle">
-                                            <h5 class="mb-0"><a href="#" class="text-dark d-inline-block">Lumix
-                                                    camera lense</a></h5><span
-                                                class="text-muted font-weight-normal font-italic">Category:
-                                                Electronics</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <td class="align-middle"><strong>$79.00</strong></td>
-                                <td class="align-middle"><strong>3</strong></td>
-                                <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    <div class="p-2">
-                                        <img src="https://res.cloudinary.com/mhmd/image/upload/v1556670479/product-2_qxjis2.jpg"
-                                            alt="" width="70" class="img-fluid rounded shadow-sm">
-                                        <div class="ml-3 d-inline-block align-middle">
-                                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">Gray Nike
-                                                    running shoe</a></h5><span
-                                                class="text-muted font-weight-normal font-italic">Category:
-                                                Fashion</span>
-                                        </div>
-                                    </div>
-                                <td class="align-middle"><strong>$79.00</strong></td>
-                                <td class="align-middle"><strong>3</strong></td>
-                                <td class="align-middle"><a href="#" class="text-dark"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -150,14 +144,14 @@
                             <ul class="list-unstyled mb-4">
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
                                         class="text-muted">Order
-                                        Subtotal </strong><strong>$390.00</strong></li>
+                                        Subtotal </strong><strong>{{ Cart::subtotal() }}</strong></li>
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
-                                        class="text-muted">Shipping and handling</strong><strong>$10.00</strong></li>
+                                        class="text-muted">Delivery fee</strong><strong>$10.00</strong></li>
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
-                                        class="text-muted">Tax</strong><strong>$0.00</strong></li>
+                                        class="text-muted">Vat (7.5%)</strong><strong>{{ Cart::tax() }}</strong></li>
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
                                         class="text-muted">Total</strong>
-                                    <h5 class="font-weight-bold">$400.00</h5>
+                                    <h5 class="font-weight-bold">{{ Cart::total() }}</h5>
                                 </li>
                             </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Procceed to checkout</a>
                         </div>

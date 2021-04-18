@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,12 +19,23 @@ use App\Http\Controllers\CartController;
 //     return view('welcome');
 // });
 
-Route::resource('cart', CartController::class);
+// Route::resource('cart', CartController::class);
 
-// Route::get('cart', function () {
+Route::group([], function () {
 
-//     return view('front-end.cart.index');
-// });
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::put('/cart/{id}/increment', [CartController::class, 'itemIncrement'])->name('cart.itemIncrement');
+    Route::put('/cart/{id}/decrement', [CartController::class, 'itemDecrement'])->name('cart.itemDecrement');
+});
+
+Route::put('/hello/update/{id}/{increment}/', [CartController::class, 'increment'])->name('cart.updateProduct');
+
+Route::get('destroy', function () {
+
+    Cart::destroy();
+});
 
 
 Route::view('/', 'front-end.index');

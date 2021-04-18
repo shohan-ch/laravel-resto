@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
@@ -36,10 +37,19 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
 
 
-        Cart::add($request->id,  $request->name, 1, $request->price)->associate('\App\Models\Product');
+        // $duplicates = Cart::search(function ($cartItem, $rowId) use ($request) {
+
+        //     return $cartItem->id ===  $request->id;
+        // });
+
+        // if ($duplicates->isNotEmpty()) {
+        //     return redirect()->route('cart.index')->with('success', 'Item is already in your cart!');
+        // }
+
+
+        Cart::add($request->id,  $request->name, 1, $request->price)->associate('App\Models\Product');
         return redirect()->route('cart.index')->with('success', 'Successfully added to cart');
     }
 
@@ -72,9 +82,17 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $incrment = null)
     {
-        //
+
+
+        // if ($incrment) {
+        $product = Cart::get($id);
+        $qty     = $product->qty + 1;
+
+        Cart::update($id,  $qty);
+        return back()->with('success', 'Cart updated!');
+        // }
     }
 
     /**
@@ -86,5 +104,30 @@ class CartController extends Controller
     public function destroy($id)
     {
         //
+        Cart::remove($id);
+        return back()->with('success', 'Item has been remove from cart!');
+    }
+
+    public function itemIncrement(Request $request, $id)
+    {
+        # code...
+
+        // dd($id);
+
+        $product = Cart::get($id);
+        $qty     = $product->qty + 1;
+
+        // Cart::update($id,  $request->quantity);
+        Cart::update($id,  $qty);
+        return back()->with('success', 'Cart updated!');
+    }
+
+    public function itemDecrement($id)
+    {
+
+        $product = Cart::get($id);
+        $qty     = $product->qty - 1;
+        Cart::update($id,  $qty);
+        return back()->with('success', 'Cart updated!');
     }
 }

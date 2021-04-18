@@ -33,73 +33,39 @@
 
     <tbody class="">
 
+      @foreach (Cart::content() as $item )
+
+
+
       <tr>
         <td>
-          <p style="color: #cda45e;font-weight: bold; font-size: 15px;">Dhakaiya Pizza</p> <span> <small
-              class="font-weight-bold text-white">Regular</small> </span>
+          <p style="color: #cda45e;font-weight: bold; font-size: 15px;">{{ $item->model->name }}</p> <span> <small
+              class="font-weight-bold text-white">{{ $item->model->status }}</small> </span>
         </td>
 
         <td>
-          <p class="font-weight-lighter text-white"> BDT 125</p>
+          <p class="font-weight-lighter text-white">$ {{ $item->model->price }}</p>
           <ul class="p-0 list-unstyled list-inline">
-            <li class="list-inline-item"> <a href="#"><i class="icofont-delete-alt"></i></a></li>
-            <li class="list-inline-item text-white">2</li>
+            <li class="list-inline-item">
+              <form action="{{ route('cart.destroy', $item->rowId) }}" method="post" id="cart-dlt">
+                @csrf
+                @method('delete')
+                <a href="#" onclick="document.getElementById('cart-dlt').submit()"><i
+                    class="icofont-delete-alt"></i></a>
+
+              </form>
+
+              {{-- <a href="#"><i class="icofont-delete-alt"></i></a> --}}
+
+            </li>
+            <li class="list-inline-item text-white">{{ $item->qty }}</li>
             <li class="list-inline-item"><a href="#"><i class="icofont-plus"></i></a></li>
           </ul>
         </td>
 
       </tr>
 
-      <tr>
-        <td>
-          <p class="m-0" style="color: #cda45e;font-weight: bold; font-size: 15px;">Dhakaiya Pizza</p> <span> <small
-              class="font-weight-bold text-white">Regular</small> </span>
-        </td>
-
-        <td>
-          <p class="m-0 font-weight-lighter text-white"> BDT 125</p>
-          <ul class="p-0 list-unstyled list-inline">
-            <li class="list-inline-item"> <a href="#"><i class="icofont-delete-alt"></i></a></li>
-            <li class="list-inline-item text-white">2</li>
-            <li class="list-inline-item"><a href="#"><i class="icofont-plus"></i></a></li>
-          </ul>
-        </td>
-
-      </tr>
-
-      <tr>
-        <td>
-          <p class="m-0" style="color: #cda45e;font-weight: bold; font-size: 15px;">Dhakaiya Pizza</p> <span> <small
-              class="font-weight-bold text-white">Regular</small> </span>
-        </td>
-
-        <td>
-          <p class="m-0 font-weight-lighter text-white"> BDT 125</p>
-          <ul class="p-0 list-unstyled list-inline">
-            <li class="list-inline-item"> <a href="#"><i class="icofont-delete-alt"></i></a></li>
-            <li class="list-inline-item text-white">2</li>
-            <li class="list-inline-item"><a href="#"><i class="icofont-plus"></i></a></li>
-          </ul>
-        </td>
-
-      </tr>
-
-      <tr>
-        <td>
-          <p class="m-0" style="color: #cda45e;font-weight: bold; font-size: 15px;">Dhakaiya Pizza</p> <span> <small
-              class="font-weight-bold text-white">Regular</small> </span>
-        </td>
-
-        <td>
-          <p class="m-0 font-weight-lighter text-white"> BDT 125</p>
-          <ul class="p-0 list-unstyled list-inline">
-            <li class="list-inline-item"> <a href="#"><i class="icofont-delete-alt"></i></a></li>
-            <li class="list-inline-item text-white">2</li>
-            <li class="list-inline-item"><a href="#"><i class="icofont-plus"></i></a></li>
-          </ul>
-        </td>
-
-      </tr>
+      @endforeach
 
 
     </tbody>
@@ -110,18 +76,29 @@
     <div class="col-md-6">
       <p>Subtotal</p>
       <p>Delivery Fee</p>
-      <p>Tax</p>
+      <p>Vat (10%)</p>
       <p>Total</p>
 
 
     </div>
+    @if(Cart::count()>0)
 
     <div class="col-md-6 text-right">
-      <p>100</p>
-      <p>90</p>
-      <p>20</p>
-      <p>1500</p>
+      <p>{{ Cart::subtotal() }}</p>
+      <p>10</p>
+      <p>{{ Cart::tax() }}</p>
+      <p>{{ Cart::total() }}</p>
     </div>
+    @else
+    <div class="col-md-6 text-right">
+      <p>$ 0</p>
+      <p>$ 0</p>
+      <p>$ 0</p>
+      <p>$ 0</p>
+
+    </div>
+
+    @endif
 
   </div>
 

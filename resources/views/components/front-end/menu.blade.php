@@ -68,7 +68,8 @@
                             <input type="hidden" name="name" value="{{ $product->name }}">
                             <input type="hidden" name="price" value="{{ $product->price }}">
 
-                            <button type="submit" style="font-size: 26px;"><i class="icofont-plus-square"></i></button>
+                            <button type="submit" style="font-size: 28px;" class="btn btn-sm"><i
+                                    class="icofont-plus-square" style="color: #cda45e;"></i></button>
 
                         </form>
 

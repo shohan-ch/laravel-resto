@@ -4,8 +4,7 @@
 @section('content')
 
 
-
-
+{{-- {{ dd( \App\Models\DeliveryFee::all())  }} --}}
 
 <div class="pb-5" style="margin-top: 170px">
     <div class="container">
@@ -41,7 +40,6 @@
                             {{-- {{  dump(Cart::content()) }} --}}
                             @foreach (Cart::content() as $item )
 
-
                             <tr>
                                 <th scope="row" class="border-0">
                                     <div class="p-2">
@@ -51,9 +49,6 @@
                                             <h5 class="mb-0"> <a href="#"
                                                     class="text-dark d-inline-block align-middle">{{ $item->model->name }}</a>
                                             </h5>
-                                            {{-- <span
-                                                class="text-muted font-weight-normal font-italic d-block">Category:
-                                                Watches</span> --}}
                                         </div>
                                     </div>
                                 </th>
@@ -90,7 +85,7 @@
                                         @csrf
                                         @method('delete')
 
-                                        <button type="submit" class="text-dark">
+                                        <button type="submit" class="text-dark btn">
                                             <i class="icofont-trash"></i>
                                         </button>
 
@@ -100,6 +95,8 @@
                             </tr>
 
                             @endforeach
+
+
                         </tbody>
                     </table>
                 </div>
@@ -146,24 +143,43 @@
                                         class="text-muted">Order
                                         Subtotal </strong><strong>{{ Cart::subtotal() }}</strong></li>
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
-                                        class="text-muted">Delivery fee</strong><strong>$10.00</strong></li>
+                                        class="text-muted">Delivery
+                                        fee</strong>
+
+
+                                    @foreach ( \App\Models\DeliveryFee::all() as $delivery )
+
+                                    @if(Cart::count()=== $delivery->quantity )
+
+                                    <strong>{{ $delivery->charges }}</strong></li>
+
+
+
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
                                         class="text-muted">Vat (7.5%)</strong><strong>{{ Cart::tax() }}</strong></li>
                                 <li class="d-flex justify-content-between py-3 border-bottom text-dark"><strong
                                         class="text-muted">Total</strong>
-                                    <h5 class="font-weight-bold">{{ Cart::total() }}</h5>
+                                    <h5 class="font-weight-bold">{{ Cart::total() + $delivery->charges }}</h5>
                                 </li>
+
+                                @endif
+
+                                @endforeach
                             </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Procceed to checkout</a>
                         </div>
+
                     </div>
+                    {{-- @endforeach --}}
 
 
                 </div>
 
 
 
+
             </div>
         </div>
+
 
 
 

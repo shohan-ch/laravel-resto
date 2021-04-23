@@ -15,7 +15,8 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+
+        // dd(Cart::content());
         return view('front-end.cart.index');
     }
 
@@ -47,7 +48,6 @@ class CartController extends Controller
         // if ($duplicates->isNotEmpty()) {
         //     return redirect()->route('cart.index')->with('success', 'Item is already in your cart!');
         // }
-
 
         Cart::add($request->id,  $request->name, 1, $request->price)->associate('App\Models\Product');
         return redirect()->route('cart.index')->with('success', 'Successfully added to cart');
@@ -82,18 +82,18 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $incrment = null)
-    {
+    // public function update(Request $request, $id, $incrment = null)
+    // {
 
 
-        // if ($incrment) {
-        $product = Cart::get($id);
-        $qty     = $product->qty + 1;
+    //     // if ($incrment) {
+    //     $product = Cart::get($id);
+    //     $qty     = $product->qty + 1;
 
-        Cart::update($id,  $qty);
-        return back()->with('success', 'Cart updated!');
-        // }
-    }
+    //     Cart::update($id,  $qty);
+    //     return back()->with('success', 'Cart updated!');
+    //     // }
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -103,16 +103,12 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
         Cart::remove($id);
         return back()->with('success', 'Item has been remove from cart!');
     }
 
     public function itemIncrement(Request $request, $id)
     {
-        # code...
-
-        // dd($id);
 
         $product = Cart::get($id);
         $qty     = $product->qty + 1;
